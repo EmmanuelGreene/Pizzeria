@@ -9,6 +9,6 @@ namespace Pizzeria.Types
         string CustomerAddress,
         string PizzaType,
         string Toppings,
-        string PizzaSize,
-        string Status);
+        PizzaSize PizzaSize,
+        OrderStatus Status);
 }

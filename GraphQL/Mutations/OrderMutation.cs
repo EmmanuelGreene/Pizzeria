@@ -10,6 +10,27 @@ namespace Pizzeria.GraphQL.Mutations
     {
         public async Task<Order> AddOrder(Order input, [Service] PizzeriaDbContext dbContext)
         {
+            // Validate pizza size
+            if (!Enum.IsDefined(typeof(PizzaSize), input.PizzaSize))
+            {
+                throw new InvalidOperationException("Invalid pizza size.");
+            }
+
+            // Check for duplicate orders
+            bool orderExists = await dbContext.Orders.AnyAsync(o =>
+                o.CustomerName == input.CustomerName &&
+                o.CustomerAddress == input.CustomerAddress &&
+                o.PizzaType == input.PizzaType &&
+                o.Toppings == input.Toppings &&
+                o.PizzaSize == input.PizzaSize &&
+                o.Status != OrderStatus.Delivered);
+
+            if (orderExists)
+            {
+                throw new InvalidOperationException("Duplicate order exists for the same customer and pizza type.");
+            }
+
+            // Add new Order
             var order = new OrderEntity
             {
                 CustomerName = input.CustomerName,
@@ -18,7 +39,7 @@ namespace Pizzeria.GraphQL.Mutations
                 PizzaType = input.PizzaType,
                 Toppings = input.Toppings,
                 PizzaSize = input.PizzaSize,
-                Status = input.Status,
+                Status = OrderStatus.Preparing,
             };
 
             dbContext.Orders.Add(order);

@@ -18,8 +18,8 @@ namespace Pizzeria.Data.Entities
         [Required]
         public required string Toppings { get; set; }
         [Required]
-        public required string PizzaSize { get; set; }
+        public required PizzaSize PizzaSize { get; set; }
         [Required]
-        public required string Status { get; set; }
+        public required OrderStatus Status { get; set; }
     }
 }
