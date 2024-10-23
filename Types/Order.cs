@@ -3,7 +3,7 @@
 namespace Pizzeria.Types
 {
     public record Order(
-        int? Id,
+        int Id,
         string CustomerName,
         string CustomerPhone,
         string CustomerAddress,
